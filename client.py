@@ -47,12 +47,34 @@ if created_ws:
     sheet['J1'] = "summary"
     sheet['K1'] = "ranking"
 
+books = list() # will hold list of book
+rows = sheet.max_row
+cols = sheet.max_column
 
 # go through sheet and update library
+for i in range(2,rows+1):
+    tmp_book = Book(
+        sheet.cell(row=i, col=1),
+        sheet.cell(row=i,col=2),
+        sheet.cell(row=i, col=3),
+        sheet.cell(row=i,col=4),
+        sheet.cell(row=i, col=5),
+        sheet.cell(row=i,col=6),
+        sheet.cell(row=i, col=7),
+        sheet.cell(row=i,col=8),
+        sheet.cell(row=i, col=9),
+        sheet.cell(row=i,col=10),
+        sheet.cell(row=i, col=11)
+    )
+
+    books.append(tmp_book)
+
+library = Library(books) # creates the library based off the books
 
 # should save when app is closed or when client requsests save
-full_path = os.path.join(target_folder, file_name)
-wb.save(full_path)
+def save(target_folder, file_name, wb):
+    full_path = os.path.join(target_folder, file_name)
+    wb.save(full_path)
 
 
 @app.route('/')
