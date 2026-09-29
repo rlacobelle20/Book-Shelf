@@ -14,6 +14,11 @@ app = Flask(__name__)
 # open spreadsheet and store locally
 sample_sheet = "data/sample.xlsx"
 
+target_folder = "data/"
+file_name = "sample.xlsx"
+
+created_ws = False
+
 # check if workbook exits
 try: 
     wb = openpyxl.load_workbook(sample_sheet)
@@ -21,11 +26,33 @@ try:
 except FileNotFoundError:
     # create workbook
     wb = openpyxl.Workbook()
+    created_ws = True
     print(f"Workbook not found. Created worksheet: {sample_sheet}")
 
 sheet = wb.active() # open workbook
 
+# make sure label is correct
+if created_ws:
+    # add labels to worksheet
+    sheet.title = "Sample Sheet"
+    sheet['A1'] = "title"
+    sheet['B1'] = "author"
+    sheet['C1'] = "year"
+    sheet['D1'] = "publisher"
+    sheet['E1'] = "series"
+    sheet['F1'] = "book_num"
+    sheet['G1'] = "date_started"
+    sheet['H1'] = "date_finished"
+    sheet['I1'] = "read_count"
+    sheet['J1'] = "summary"
+    sheet['K1'] = "ranking"
+
+
 # go through sheet and update library
+
+# should save when app is closed or when client requsests save
+full_path = os.path.join(target_folder, file_name)
+wb.save(full_path)
 
 
 @app.route('/')
